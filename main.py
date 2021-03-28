@@ -3,10 +3,11 @@ import numpy as np
 from random import *
 import math
 from functools import *
+import time
 
 
-y_max = (30 - 15)*10           # 210
-y_min = (20 - 15)*10           # 110
+y_max = (30 - 15)*10
+y_min = (20 - 15)*10
 
 x_table = [[-1,-1],
            [-1,+1],
@@ -159,30 +160,67 @@ def assert_naturalized_regression():
     print("Правильні результати натуралізації")
 
 
-m = 5
-y_table = experiment()
-
-while not roma_crit(*y_table):
-    m += 1
+m = int(input("Введіть бажану m - "))
+if m < 20:
     y_table = experiment()
 
-labels_table = ["x1", "x2"] + ["y{}".format(i+1) for i in range(m)]
-rows_table = [naturalized_x_table[i] + list(y_table[i]) for i in range(3)]
-rows_normalized_table = [x_table[i] + list(y_table[i]) for i in range(3)]
+    while not roma_crit(*y_table):
+        m += 1
+        y_table = experiment()
 
-print("Матриця планування:")
-print((" "*4).join(labels_table))
-print("\n".join([" ".join(map(lambda j: "{:<+5}".format(j), rows_table[i])) for i in range(len(rows_table))]))
-print("\t")
+    labels_table = ["x1", "x2"] + ["y{}".format(i + 1) for i in range(m)]
+    rows_table = [naturalized_x_table[i] + list(y_table[i]) for i in range(3)]
+    rows_normalized_table = [x_table[i] + list(y_table[i]) for i in range(3)]
 
-print("Нормована матриця планування:")
-print((" "*4).join(labels_table))
-print("\n".join([" ".join(map(lambda j: "{:<+5}".format(j), rows_normalized_table[i])) for i in range(len(rows_normalized_table))]))
-print("\t")
+    print("Матриця планування:")
+    print((" " * 4).join(labels_table))
+    print("\n".join([" ".join(map(lambda j: "{:<+5}".format(j), rows_table[i])) for i in range(len(rows_table))]))
+    print("\t")
 
-b_coeffs = normalized_regression_coeffs()
-print("Рівняння регресії для нормованих факторів: y = {0} {1:+}*x1 {2:+}*x2".format(*b_coeffs))
-assert_normalized_regression()
-a_coeffs = naturalized_regression(b_coeffs)
-print("\nРівняння регресії для натуралізованих факторів: y = {0} {1:+}*x1 {2:+}*x2".format(*a_coeffs))
-assert_naturalized_regression()
+    print("Нормована матриця планування:")
+    print((" " * 4).join(labels_table))
+    print("\n".join([" ".join(map(lambda j: "{:<+5}".format(j), rows_normalized_table[i])) for i in
+                     range(len(rows_normalized_table))]))
+    print("\t")
+
+    b_coeffs = normalized_regression_coeffs()
+    print("Рівняння регресії для нормованих факторів: y = {0} {1:+}*x1 {2:+}*x2".format(*b_coeffs))
+    assert_normalized_regression()
+    a_coeffs = naturalized_regression(b_coeffs)
+    print("\nРівняння регресії для натуралізованих факторів: y = {0} {1:+}*x1 {2:+}*x2".format(*a_coeffs))
+    assert_naturalized_regression()
+else:
+    print("Введіть m меншу 20 "),
+    time.sleep(3)
+    m = int(input("Введіть бажану m - "))
+    if m < 20:
+        y_table = experiment()
+
+        while not roma_crit(*y_table):
+            m += 1
+            y_table = experiment()
+
+        labels_table = ["x1", "x2"] + ["y{}".format(i + 1) for i in range(m)]
+        rows_table = [naturalized_x_table[i] + list(y_table[i]) for i in range(3)]
+        rows_normalized_table = [x_table[i] + list(y_table[i]) for i in range(3)]
+
+        print("Матриця планування:")
+        print((" " * 4).join(labels_table))
+        print("\n".join([" ".join(map(lambda j: "{:<+5}".format(j), rows_table[i])) for i in range(len(rows_table))]))
+        print("\t")
+
+        print("Нормована матриця планування:")
+        print((" " * 4).join(labels_table))
+        print("\n".join([" ".join(map(lambda j: "{:<+5}".format(j), rows_normalized_table[i])) for i in
+                         range(len(rows_normalized_table))]))
+        print("\t")
+
+        b_coeffs = normalized_regression_coeffs()
+        print("Рівняння регресії для нормованих факторів: y = {0} {1:+}*x1 {2:+}*x2".format(*b_coeffs))
+        assert_normalized_regression()
+        a_coeffs = naturalized_regression(b_coeffs)
+        print("\nРівняння регресії для натуралізованих факторів: y = {0} {1:+}*x1 {2:+}*x2".format(*a_coeffs))
+        assert_naturalized_regression()
+
+
+
